@@ -13,11 +13,11 @@ services:
             - /usr/src/app/node_modules
         tty: true
         depends_on:
-            - db
+            - mysql
         ports:
             - "3000:3000"
 
-    db:
+    mysql:
         build:
             context: ./mysql
         command: --innodb-use-native-aio=0
@@ -25,10 +25,12 @@ services:
         restart: always
         tty: true
         environment: 
-            - MYSQL_DATABASE=node_db
-            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=${DATABASE}
+            - MYSQL_ROOT_PASSWORD=${PASSWORD}
         networks:
             - node-network
+        ports:
+            - "3306:3306"
 
     nginx:
         build:
@@ -41,3 +43,7 @@ services:
             - node-network
         ports: 
             - "8080:80"
+
+networks:
+    node-network:
+        driver: bridge

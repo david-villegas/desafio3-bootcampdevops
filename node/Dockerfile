@@ -1,6 +1,10 @@
 FROM node:15
 
+COPY package.json /usr/src/app/package.json
+
 WORKDIR /usr/src/app
+
+RUN npm install
 
 COPY . .
 
